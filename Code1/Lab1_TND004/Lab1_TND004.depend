@@ -1,0 +1,19 @@
+# depslib dependency file v1.0
+1427969260 source:f:\tnd004 - datastrukturer\code1\main.cpp
+	<iostream>
+	<iomanip>
+	<string>
+	<algorithm>
+	<cctype>
+	"set.cpp"
+
+1429194099 f:\tnd004 - datastrukturer\code1\set.cpp
+	<iostream>
+	<new>
+	<cassert>
+
+1427971311 source:f:\tnd004 - datastrukturer\code1\set.cpp
+	<iostream>
+	<new>
+	<cassert>
+

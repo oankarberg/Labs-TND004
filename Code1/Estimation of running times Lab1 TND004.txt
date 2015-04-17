@@ -1,0 +1,34 @@
+You are requested to estimate the running time of the following statements. Use Big-Oh
+notation and motivate clearly your answers.
+ Set<T> S(V, n); -- where V is an array with n objects of type T.
+ S1 = S2; -- where S1 and S2 are two Sets.
+ S.cardinality(); -- where S is a Set.
+ S1 <= S2; -- where S1 and S2 are two Sets.
+
+ S1 + S2; -- where S1 and S2 are two Sets.
+ k+S; -- where S is a Set of elements of a type T (e.g. int) and k is a value of
+type T (e.g. constant 5).
+Remember to write your answers in paper, preferably computer typed, and do not forget to
+indicate the name plus LiU login of each group member. Deliver your written answers to
+the lab assistant, when you present the lab
+
+
+Oskar Ankarberg oskan069@student.liu.se
+
+Estimation of running times Lab 1
+1. Set<T> S(V, n); -- where V is an array with n objects of type T.
+  - Should be O(n), since we loop and store values in the Set.
+
+2. S1 = S2; -- where S1 and S2 are two Sets.
+  - Should be O(n) since we loop through set by clearing and inserting
+
+3. S.cardinality(); -- where S is a Set.
+  - Should be O(1), only comparing 2 values
+
+4. S1 <= S2; -- where S1 and S2 are two Sets.
+  - Should be O(n) , looping over sets to see if S1 is subset.
+
+5. S1 + S2; -- where S1 and S2 are two Sets.
+  - Should be O(n) , looping and adding set
+
+6. 
