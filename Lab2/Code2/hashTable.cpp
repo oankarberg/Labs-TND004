@@ -39,7 +39,10 @@ int nextPrime( int n )
 HashTable::HashTable(int table_size, HASH f)
     : size(nextPrime(table_size)), h(f), nItems(0)
 {
-    hTable = nullptr; //to be deleted
+    hTable = new Item*[size];
+    for(int i = 0; i < size; i++){
+        hTable[i] = nullptr;
+    }
 
 }
 
@@ -48,7 +51,11 @@ HashTable::HashTable(int table_size, HASH f)
 // IMPLEMENT
 HashTable::~HashTable()
 {
-
+//    for (int i = 0; i < size; i++)
+//    {
+//        delete hTable[i];
+//    }
+    delete hTable;
 }
 
 
@@ -64,8 +71,16 @@ double HashTable::loadFactor() const
 // IMPLEMENT
 int HashTable::find(string key) const
 {
+    for(int i = 0; i < size; i++){
+        if(hTable[i] != nullptr){
+            if(hTable[i]->key == key && hTable[i]->key != ""){
+                return hTable[i]->value;
+            }
+        }
+    }
     return NOT_FOUND; //to be deleted
 }
+
 
 
 //Insert the Item (key, v) in the table
@@ -74,6 +89,41 @@ int HashTable::find(string key) const
 // IMPLEMENT
 void HashTable::insert(string key, int v)
 {
+
+
+    //Check if the value excist in table and change it
+    for(int i = 0; i < size; i++){
+
+        if(hTable[i] != nullptr){
+            if(hTable[i]->key == key){
+                hTable[i] = new Item(key, v);
+                return;
+            }
+        }
+    }
+
+    //Insert the item in the table
+    for(int i = 0; i < size; i++){
+        //Set index of position to try to add item on
+        int hashNumber = ( h(key,size) + i) % size;
+        cout << "hashNumber " << hashNumber << " Size " << size << endl;
+//        if(hashNumber == size){
+//            hashNumber = ;
+//        }
+        if(hTable[hashNumber] == nullptr || hTable[hashNumber]->key == ""){
+            cout << "hashNumber 2" << hashNumber << endl;
+            hTable[hashNumber] = new Item(key, v);
+            break;
+        }
+    }
+
+    nItems++;
+
+    if(loadFactor() > MAX_LOAD_FACTOR){
+        reHash();
+    }
+
+
 
 }
 
@@ -84,7 +134,17 @@ void HashTable::insert(string key, int v)
 // IMPLEMENT
 bool HashTable::remove(string key)
 {
-    return true; //to be deleted
+    for(int i = 0; i < size; i++){
+        if(hTable[i] != nullptr){
+            if(hTable[i]->key == key){
+                delete hTable[i];
+                hTable[i] = new Item("",-1);
+                return true;
+            }
+        }
+    }
+
+    return false; //to be deleted
 }
 
 
@@ -122,6 +182,9 @@ ostream& operator<<(ostream& os, const HashTable& T)
 {
     return os;
 }
+//HashTable& operator[](const string &key){
+//    insert(key, );
+//}
 
 //Private member functions
 
@@ -129,5 +192,50 @@ ostream& operator<<(ostream& os, const HashTable& T)
 // IMPLEMENT
 void HashTable::reHash()
 {
+    cout << "Rehashing.." << endl;
+    int tempSize = size;
+    size = nextPrime(tempSize*2);
+    cout << "New Size: " << size;
+    Item** hTemp = hTable;
+    hTable = new Item*[size];
+    nItems = 0;
+    for(int i = 0; i < size; i++){
+        hTable[i] = nullptr;
+    }
+    //Copy the table over;
+    for(int i = 0; i < tempSize; i++){
+
+        if(hTemp[i] != nullptr)
+        {
+            insert(hTemp[i]->key,hTemp[i]->value);
+//            int tempNum = h(hTemp[i]->key, size);
+//
+//            if(tempNum == size){
+//                tempNum == 0;
+//            }
+//            if(hTable[tempNum] == nullptr){
+//                cout << "tempNumb " << tempNum << endl;
+//                hTable[tempNum] = hTemp[i];
+//            }
+        }
+
+    }
+
+
+}
+
+
+// new Hashfunction
+/**
+2 * A hash routine for string objects.
+3 */
+unsigned int hash( const string & key, int tableSize )
+{
+    unsigned int hashVal = 0;
+
+    for( char ch : key )
+    hashVal = 37 * hashVal + ch;
+
+    return hashVal % tableSize;
 
 }

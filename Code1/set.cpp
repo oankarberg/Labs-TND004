@@ -666,8 +666,6 @@ Set<T> Set<T>::_union(const Set& b) const
         c.insert(c.tail,tempB->value);
         tempB = tempB->next;
     }
-
-    //Set<T> newSet(A,i);
     return c; //delete this code
 }
 

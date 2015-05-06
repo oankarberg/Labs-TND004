@@ -6,6 +6,7 @@
 */
 
 #include <iostream>
+#include <fstream>
 #include <string>
 
 #include "hashTable.h"
@@ -21,8 +22,18 @@ unsigned my_hash(string s, int tableSize)
         hashVal += s[i];
 
     hashVal %= tableSize;
-
     return hashVal;
+}
+
+unsigned int my_hash2( const string & key, int tableSize )
+{
+    unsigned int hashVal = 0;
+
+    for( char ch : key )
+    hashVal = 37 * hashVal + ch;
+
+    return hashVal % tableSize;
+
 }
 
 
@@ -39,7 +50,8 @@ int menu()
     cout << "2. Search" << endl;
     cout << "3. Delete" << endl;
     cout << "4. Dump table" << endl;
-    cout << "5. Exit" << endl;
+    cout << "5. Read in from file" << endl;
+    cout << "6. Exit" << endl;
 
     cout << "Enter your choice: ";
 
@@ -51,6 +63,9 @@ int menu()
 
 int main()
 {
+    fstream myfile;
+    string word;
+
     const int TABLE_SIZE = 7;
 
     HashTable table(TABLE_SIZE, my_hash);
@@ -62,7 +77,6 @@ int main()
     bool go = true;
 
     while( go )
-
     {
         choice = menu();
 
@@ -109,6 +123,15 @@ int main()
             break;
 
         case 5:
+//            myfile.open("test_files/test_file1.txt");
+//
+//
+//            while (myfile >> word)
+//            {
+//                table[word];
+//            }
+            break;
+        case 6:
             go = false;
             break;
 

@@ -1,0 +1,25 @@
+# depslib dependency file v1.0
+1426175968 source:f:\tnd004 - datastrukturer\lab2\code2\item.cpp
+	"Item.h"
+
+1426283614 f:\tnd004 - datastrukturer\lab2\code2\item.h
+	<iostream>
+	<string>
+	<iomanip>
+	<new>
+
+1430145960 source:f:\tnd004 - datastrukturer\lab2\code2\test.cpp
+	<iostream>
+	<fstream>
+	<string>
+	"hashTable.h"
+
+1430145648 f:\tnd004 - datastrukturer\lab2\code2\hashtable.h
+	"item.h"
+	<iostream>
+
+1430155238 source:f:\tnd004 - datastrukturer\lab2\code2\hashtable.cpp
+	<assert.h>
+	<iomanip>
+	"hashTable.h"
+
