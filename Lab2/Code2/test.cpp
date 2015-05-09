@@ -13,6 +13,8 @@
 
 using namespace std;
 
+bool test_special_char(char c);
+
 //A simple hash function
 unsigned my_hash(string s, int tableSize)
 {
@@ -25,7 +27,7 @@ unsigned my_hash(string s, int tableSize)
     return hashVal;
 }
 
-unsigned int my_hash2( const string & key, int tableSize )
+unsigned int my_hash2( string key, int tableSize )
 {
     unsigned int hashVal = 0;
 
@@ -69,6 +71,7 @@ int main()
     const int TABLE_SIZE = 7;
 
     HashTable table(TABLE_SIZE, my_hash);
+    HashTable freq_table(TABLE_SIZE, my_hash2);
 
     string key;
     int value = 0;
@@ -79,7 +82,7 @@ int main()
     while( go )
     {
         choice = menu();
-
+        int count =0;
         switch(choice)
         {
         case 1:
@@ -123,13 +126,20 @@ int main()
             break;
 
         case 5:
-//            myfile.open("test_files/test_file1.txt");
-//
-//
-//            while (myfile >> word)
-//            {
-//                table[word];
-//            }
+           myfile.open("test_files/test_file2.txt");
+           cout << "heelo " << endl;
+           
+           while (myfile >> word)
+           {
+                transform(word.begin(), word.end(), word.begin(),::tolower);
+                string temp = "";
+                copy_if(word.begin(),word.end(), back_inserter(temp), test_special_char);
+
+               freq_table[temp];
+               count++;
+           }
+           cout << "Number of words in the file = "<< count <<  endl;
+           freq_table.display_freq_table(cout);
             break;
         case 6:
             go = false;
@@ -142,3 +152,11 @@ int main()
 
     return 0;
 }
+bool test_special_char(char c){
+    if( c == ',' || c == '"' || c == '.' || c == '?' || c =='!' || 
+        c == ';' || c == '\'' || c == ':')
+        return false;
+    else 
+        return true;
+}
+

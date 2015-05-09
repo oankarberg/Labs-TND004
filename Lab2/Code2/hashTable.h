@@ -33,6 +33,7 @@ public:
     typedef unsigned (*HASH)(string, int); //new type HASH: pointer to a hash function
 
 
+
     /** \brief Constructor to create a hash table
      *
      * \param table_size number of slots in the table (note: next prime number can be used)
@@ -139,6 +140,8 @@ public:
     //Display the table for debug and testing purposes
     void display(ostream& os);
 
+    void display_freq_table(ostream& os);
+
 
 private:
     //data members
@@ -152,6 +155,7 @@ private:
     //number of items stored in the table
     int nItems; /**< number of items stored in the table */
 
+    int uniqueWords = 0;
 
     //Each slot of the table stores a pointer to an Item =(key, value)
     Item** hTable; /**< table is an array of pointers to Items */

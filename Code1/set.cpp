@@ -587,7 +587,7 @@ Set<T>& Set<T>::insert(Node *p, T val)
     p->prev = p->prev->next = temp;
     counter++;
 
-    //return *this; //delete this code
+    return *this; //delete this code
 }
 
 
@@ -599,7 +599,7 @@ Set<T>& Set<T>::erase(Node *p)
     p->next->prev = p->prev;
     counter--;
     delete p;
-
+    return *this;
 }
 
 //Create an empty Set

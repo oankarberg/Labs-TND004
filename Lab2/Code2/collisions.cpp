@@ -8,7 +8,6 @@ using namespace std;
 int main()
 {
     const int TABLE_SIZE = 1000003;
-
     bool check[TABLE_SIZE] = {false};
 
     default_random_engine generator;

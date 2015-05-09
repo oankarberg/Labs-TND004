@@ -91,7 +91,7 @@ void HashTable::insert(string key, int v)
 {
 
 
-    //Check if the value excist in table and change it
+    //Check if the key excist in table and change the value to it
     for(int i = 0; i < size; i++){
 
         if(hTable[i] != nullptr){
@@ -106,12 +106,12 @@ void HashTable::insert(string key, int v)
     for(int i = 0; i < size; i++){
         //Set index of position to try to add item on
         int hashNumber = ( h(key,size) + i) % size;
-        cout << "hashNumber " << hashNumber << " Size " << size << endl;
+        // cout << "hashNumber " << hashNumber << " Size " << size << endl;
 //        if(hashNumber == size){
 //            hashNumber = ;
 //        }
         if(hTable[hashNumber] == nullptr || hTable[hashNumber]->key == ""){
-            cout << "hashNumber 2" << hashNumber << endl;
+            // cout << "hashNumber 2" << hashNumber << endl;
             hTable[hashNumber] = new Item(key, v);
             break;
         }
@@ -175,6 +175,30 @@ void HashTable::display(ostream& os)
     os << endl;
 }
 
+void HashTable::display_freq_table(ostream& os)
+{
+    if (!hTable) return;
+
+    
+    os << "Number unique  words in the file = " << uniqueWords << endl;
+    os << "Frequency table ... " << endl << endl;
+           
+    for (int i = 0; i < size; ++i)
+    {
+
+        if (hTable[i])
+        {
+            string key = hTable[i]->key;
+
+            os << "key = " <<  left << setw(20) << key 
+                << "value = " << hTable[i]->value <<
+                endl;
+        }
+    }
+
+    os << endl;
+}
+
 
 //Display the table to stream os
 // IMPLEMENT
@@ -182,9 +206,19 @@ ostream& operator<<(ostream& os, const HashTable& T)
 {
     return os;
 }
-//HashTable& operator[](const string &key){
-//    insert(key, );
-//}
+
+
+HashTable& HashTable::operator[](const string &key){
+    int tempNum = find(key);
+    
+    if(tempNum  == -1 ){
+        insert(key, 1);
+        uniqueWords++;
+    }
+    else 
+        insert(key, tempNum+1);
+   return *this;
+}
 
 //Private member functions
 
