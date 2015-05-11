@@ -51,7 +51,10 @@ HashTable::HashTable(int table_size, HASH f)
 // IMPLEMENT
 HashTable::~HashTable()
 {
-    delete hTable;
+    for(int i = 0; i < size; i++){
+        delete hTable[i];
+    }
+    delete[] hTable;
 }
 
 
@@ -74,6 +77,9 @@ int HashTable::find(string key) const
             if(hTable[hNum]->key == key && hTable[hNum]->key != ""){
                 return hTable[hNum]->value;
             }
+        }else
+        {
+            return NOT_FOUND;
         }
     }
     return NOT_FOUND; //to be deleted
@@ -97,7 +103,10 @@ void HashTable::insert(string key, int v)
         int hNum = (hVal+ i) % size;
         //If slot not empty, look if the key exist
         if(hTable[hNum] != nullptr){
-            if(hTable[hNum]->key == key || hTable[hNum]->key == ""){
+            if(hTable[hNum]->key == key){
+                hTable[hNum]->value = v; 
+                return;
+            }else if(Deleted_Item::get_Item() == hTable[hNum]){
                 hTable[hNum] = new Item(key, v);
                 return;
             }
@@ -135,10 +144,13 @@ bool HashTable::remove(string key)
         if(hTable[hVal] != nullptr){
             if(hTable[hVal]->key == key){
                 delete hTable[hVal];
-                hTable[hVal] = new Item("",-1);
+                hTable[hVal] = Deleted_Item::get_Item(); //new Item("",-1);
                 nItems--;
                 return true;
             }
+        }else
+        {
+            return false;
         }
     }
 
@@ -248,7 +260,11 @@ void HashTable::reHash()
             insert(hTemp[i]->key,hTemp[i]->value);
         }
     }
-
+    //Delete Temp Table 
+    for(int i = 0; i < tempSize; i++){
+        delete hTemp[i];
+    }
+    delete[] hTemp;
 
 }
 
