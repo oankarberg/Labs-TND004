@@ -2,3 +2,23 @@
 
 
 2. 1300
+
+3.	
+You make individual comparison for each item in all the items. 
+That makes the probability go up by exponential times.
+
+So if we check the probability of that 2 people out of 20 has the same birthday we first count the probability of 2 persons has different birhdays. 
+
+Different birthdays probability is 364 / 365 = 0.997260
+
+We have 20*19 / 2 = 190 pairs/combinations.
+
+This gives us the probability of different birthdays for all the 190 pairs: 
+
+(364/365)^190 = 0.5938
+
+Chance of having the same birthdays is 1 - 0.5938 = 40.62%
+
+
+4. 
+The collision is the same when trying to insert a key in a hashTable. The probability is although not the same.

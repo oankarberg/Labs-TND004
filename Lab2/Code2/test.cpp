@@ -126,7 +126,7 @@ int main()
             break;
 
         case 5:
-           myfile.open("test_files/test_file2.txt");
+           myfile.open("test_files/test_file1.txt");
            cout << "heelo " << endl;
            
            while (myfile >> word)
