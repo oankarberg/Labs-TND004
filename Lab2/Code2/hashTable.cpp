@@ -51,10 +51,6 @@ HashTable::HashTable(int table_size, HASH f)
 // IMPLEMENT
 HashTable::~HashTable()
 {
-//    for (int i = 0; i < size; i++)
-//    {
-//        delete hTable[i];
-//    }
     delete hTable;
 }
 
@@ -71,10 +67,12 @@ double HashTable::loadFactor() const
 // IMPLEMENT
 int HashTable::find(string key) const
 {
+    int hVal = h(key,size);
     for(int i = 0; i < size; i++){
-        if(hTable[i] != nullptr){
-            if(hTable[i]->key == key && hTable[i]->key != ""){
-                return hTable[i]->value;
+        int hNum = (hVal + i) % size;
+        if(hTable[hNum] != nullptr){
+            if(hTable[hNum]->key == key && hTable[hNum]->key != ""){
+                return hTable[hNum]->value;
             }
         }
     }
@@ -91,30 +89,25 @@ void HashTable::insert(string key, int v)
 {
 
 
-    //Check if the key excist in table and change the value to it
-    for(int i = 0; i < size; i++){
+    //Check if the key exist in table and change the value to it
+    int hVal = h(key,size);
+    int tempV = find(key);
 
-        if(hTable[i] != nullptr){
-            if(hTable[i]->key == key){
-                hTable[i] = new Item(key, v);
+    for(int i = 0; i < size; i++){
+        int hNum = (hVal+ i) % size;
+        //If slot not empty, look if the key exist
+        if(hTable[hNum] != nullptr){
+            if(hTable[hNum]->key == key || hTable[hNum]->key == ""){
+                hTable[hNum] = new Item(key, v);
                 return;
             }
-        }
-    }
-
-    //Insert the item in the table
-    for(int i = 0; i < size; i++){
-        //Set index of position to try to add item on
-        int hashNumber = ( h(key,size) + i) % size;
-        // cout << "hashNumber " << hashNumber << " Size " << size << endl;
-//        if(hashNumber == size){
-//            hashNumber = ;
-//        }
-        if(hTable[hashNumber] == nullptr || hTable[hashNumber]->key == ""){
-            // cout << "hashNumber 2" << hashNumber << endl;
-            hTable[hashNumber] = new Item(key, v);
+        //We know it not exist and therefore add it in first empty slot
+        }else if(tempV == NOT_FOUND && 
+                (hTable[hNum] == nullptr)){
+            hTable[hNum] = new Item(key, v);
             break;
         }
+
     }
 
     nItems++;
@@ -134,11 +127,16 @@ void HashTable::insert(string key, int v)
 // IMPLEMENT
 bool HashTable::remove(string key)
 {
+    //Get the hashvalue of key
+    int hValue = h(key,size);
     for(int i = 0; i < size; i++){
-        if(hTable[i] != nullptr){
-            if(hTable[i]->key == key){
-                delete hTable[i];
-                hTable[i] = new Item("",-1);
+        //increase hashvalue if the we dont find the right key
+        int hVal = (hValue + i) % size;
+        if(hTable[hVal] != nullptr){
+            if(hTable[hVal]->key == key){
+                delete hTable[hVal];
+                hTable[hVal] = new Item("",-1);
+                nItems--;
                 return true;
             }
         }
@@ -211,12 +209,15 @@ ostream& operator<<(ostream& os, const HashTable& T)
 HashTable& HashTable::operator[](const string &key){
     int tempNum = find(key);
     
-    if(tempNum  == -1 ){
+    //Check if the word exists and insert, incr unique
+    if(tempNum  == NOT_FOUND ){
         insert(key, 1);
         uniqueWords++;
     }
-    else 
+    else //Insert and increment value
+    {
         insert(key, tempNum+1);
+    }
    return *this;
 }
 
@@ -226,10 +227,13 @@ HashTable& HashTable::operator[](const string &key){
 // IMPLEMENT
 void HashTable::reHash()
 {
-    cout << "Rehashing.." << endl;
+    
     int tempSize = size;
     size = nextPrime(tempSize*2);
-    cout << "New Size: " << size;
+
+    cout << "Rehashing.." << endl;
+    cout << "New Size: " << size << endl;
+
     Item** hTemp = hTable;
     hTable = new Item*[size];
     nItems = 0;
@@ -242,34 +246,11 @@ void HashTable::reHash()
         if(hTemp[i] != nullptr)
         {
             insert(hTemp[i]->key,hTemp[i]->value);
-//            int tempNum = h(hTemp[i]->key, size);
-//
-//            if(tempNum == size){
-//                tempNum == 0;
-//            }
-//            if(hTable[tempNum] == nullptr){
-//                cout << "tempNumb " << tempNum << endl;
-//                hTable[tempNum] = hTemp[i];
-//            }
         }
-
     }
 
 
 }
 
 
-// new Hashfunction
-/**
-2 * A hash routine for string objects.
-3 */
-unsigned int hash( const string & key, int tableSize )
-{
-    unsigned int hashVal = 0;
 
-    for( char ch : key )
-    hashVal = 37 * hashVal + ch;
-
-    return hashVal % tableSize;
-
-}
