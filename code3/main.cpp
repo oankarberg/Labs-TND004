@@ -181,6 +181,17 @@ int main()
     else
     {
 
+        // it = table.find(input1);
+
+        // for(; it!= table.end(); it++)
+        // {
+        //     cout << setw(15) << right << it->first
+        //          << setw(15) << it->second << endl;
+
+
+        //     if(it->first == input2)
+        //         break;
+        // }
         it = table.find(input2);
 
         for(; it!= table.begin(); it--)

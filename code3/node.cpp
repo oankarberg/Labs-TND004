@@ -26,10 +26,10 @@ Node::~Node()
     // delete right;
     // delete left;
     // cout << "Destructor  " << endl;
-    // if(!l_thread)
-    //     delete left;
-    // if(!r_thread)
-    //     delete right;
+    if(!l_thread)
+        delete left;
+    if(!r_thread)
+        delete right;
 
 
 }
@@ -91,19 +91,40 @@ bool Node::remove(string key, Node* parent, bool isRight)
     if(key == this->value.first){
         // cout << "Remove key = " << key << endl;
         if(this->l_thread == false && this->r_thread == false){
-            // cout << "Recursively " << endl;
-            Node *temp = this->left;
-            // cout << "Temp value " << temp->value.first << endl;
-            Node *valueNode = this->left->findMax();
-            // cout << "findMax " << valueNode->value.first << endl;
-            this->value = valueNode->value;
-            return temp->remove(valueNode->value.first, this, isRight);
+            Node *child = this->left;
+            Node *tempParent = this;
 
+            //Check for max in left-subtree
+            while(!child->r_thread){
+                tempParent = child;
+                child = child->right;
+            }
+            cout << "Haa " << endl;
+            //set the new value for the "mini root"
+            this->value = child->value;
+            if(!tempParent->r_thread)
+                isRight = true;
+            else 
+                isRight = false;
+
+            child->removeMe(tempParent, isRight);
+            return true;
         }else{
+        //     // cout << "Recursively " << endl;
+        //     Node *temp = this->left;
+        //     // cout << "Temp value " << temp->value.first << endl;
+        //     Node *valueNode = this->left->findMax();
+        //     // cout << "findMax " << valueNode->value.first << endl;
+        //     this->value = valueNode->value;
+        //     // this->removeMe(parent, isRight);
+        //     return temp->remove(valueNode->value.first, this, isRight);
+        //     // return true;
+        // }else{
             // cout << " parent " << parent->value.first << endl;
             this->removeMe(parent, isRight);
             return true;
         }
+        // }
         
     //If the value is bigger the node is to right
     }else if(key > this->value.first){
@@ -131,49 +152,48 @@ bool Node::remove(string key, Node* parent, bool isRight)
 //2c: a right child with no children
 void Node::removeMe(Node* parent, bool isRight)
 {   
+    Node *childN = this;
 
    //ADD CODE
    //1a: a left child with only a right child
     if(isRight == false && l_thread == true && r_thread == false){
         // cout << "in 1a" << endl;
-        parent->left = this->right;
-        parent->l_thread = false;
-        // Node * tempP = this->right;
-        // tempP->right = parent;
+        parent->left = childN->right;
+        childN->right->findMin()->left = parent;
+
     }else if(isRight == false && l_thread == false && r_thread == true){
-        parent->left = this->left;
-        parent->l_thread = false;
-        Node * tempP = this->left;
-        tempP->right = parent;
+        parent->left = childN->left;
+        childN->left->findMax()->right = parent;
+
         // cout << "in 1b" << endl;
     }
     //No childs, to the left.
     else if(isRight == false && l_thread == true && r_thread == true){
-        parent->left = this->left;
+
+        parent->left = childN->left;
+
         parent->l_thread = true;
         // cout << "in 1c" << endl;
     //2a: a right child with only a right child
     }
     else if(isRight == true && l_thread == true && r_thread == false){
-        parent->right = this->right;
-        parent->r_thread = false;
-        // Node * tempP = this->right;
-        // tempP->left = parent;
+        parent->right = childN->right;
+        childN->right->findMin()->left = parent;
         // cout << "in 2a" << endl;
     }else if(isRight == true && l_thread == false && r_thread == true){
-        parent->right = this->left;
-        parent->r_thread = false;
-        // Node * tempP = this->left;
-        // tempP->right = parent;
+        parent->right = childN->left;
+        childN->left->findMax()->right = parent;
         // cout << "in 2b" << endl;
     }
+
     else if(isRight == true && l_thread == true && r_thread == true){
-        parent->right = this->right;
+        parent->right = childN->right;
         parent->r_thread = true;
-        // cout << "in 2c  " << this->value.first << "   " << this->value.second<<  endl;
+        // cout << "in 2c  " << childN->value.first << "   " << childN->value.second<<  endl;
     }
-    // this->l_thread = this->r_thread = true;
-    delete this;
+    childN->right = childN->left = nullptr;
+    childN->l_thread = childN->r_thread = true;
+    delete childN;
     
 
 }

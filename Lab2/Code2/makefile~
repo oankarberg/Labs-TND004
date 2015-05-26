@@ -1,0 +1,6 @@
+  # build an executable named myprog from myprog.c
+  all: test.cpp HashTable.cpp Item.cpp
+	  g++ -std=c++11 -g -Wall -o myprog test.cpp
+
+  clean:
+  	$(RM) myprog
