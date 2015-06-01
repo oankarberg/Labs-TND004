@@ -59,11 +59,12 @@ void DSets::join(int r, int s)
     // weighted union (by size)
     // array[r] = s;
     if(array[r] < array[s]){
+        array[r] = array[s];
         array[s] = r;
-        array[r]--;
     }else{
+        array[s] = array[r];
         array[r] = s;
-        array[s]--;
+        
     }
 
 }

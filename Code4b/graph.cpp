@@ -135,7 +135,8 @@ void Graph::mstKruskal() const
     int counter = 0;
     int totWeight = 0;
     while(counter < size-1){
-        Edge eMin = H.deleteMin();
+        Edge eMin = H.deleteMin(); //find edge with lowest cost
+        //Do head and tail belong to same tree?
         if(D.find(eMin.head) != D.find(eMin.tail))
         {
             D.join(D.find(eMin.head), D.find(eMin.tail));
@@ -147,7 +148,7 @@ void Graph::mstKruskal() const
 
     cout << endl << "Total Weight = " << totWeight << endl;
 
-    //D.print();
+    D.print();
     
 
  
